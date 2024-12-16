@@ -1,0 +1,11 @@
+[package]
+name = "amazon_kms_app"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+aws-sdk-kms = "0.23.0"
+aws-smithy-types = "0.42.0" # For Blob handling
+tokio = { version = "1", features = ["full"] }
+async-trait = "0.1.68"
+serde = { version = "1.0", features = ["derive"] }
