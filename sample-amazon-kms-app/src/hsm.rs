@@ -3,7 +3,7 @@ use aws_sdk_kms::{Client, Config, Region, Credentials};
 use aws_sdk_kms::model::SigningAlgorithmSpec;
 use aws_sdk_kms::output::{SignOutput, VerifyOutput};
 use aws_sdk_kms::types::Blob;
-use std::time::SystemTime; // Import SystemTime for the expiration parameter
+use std::time::SystemTime;
 use crate::message::{Bytes, Signature};
 
 #[async_trait]
@@ -73,9 +73,9 @@ impl Hsm for AmazonHsm {
             .signing_algorithm(SigningAlgorithmSpec::EcdsaSha256)
             .message(message_blob)
             .signature(signature_blob);
-
+    
         let response: VerifyOutput = request.send().await.expect("Failed to verify signature");
-
+    
         response.signature_valid()
     }
 }
