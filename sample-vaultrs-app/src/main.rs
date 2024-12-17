@@ -17,7 +17,7 @@ async fn main() {
     let hsm = VaultHsm::new(&vault_addr, &token, &key_name);
 
     let message_bytes = Bytes(b"Hello, Vault!".to_vec());
-    let signature = hsm.sign(message_bytes.clone()).await;
+    let signature = hsm.sign_message(message_bytes.clone()).await;
 
     let actions = vec![
         Message::Sign(message_bytes.clone()),

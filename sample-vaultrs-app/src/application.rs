@@ -16,11 +16,11 @@ impl Application {
         while let Some(message) = self.stream.next().await {
             match message {
                 Message::Sign(message) => {
-                    let signature = self.hsm.sign(message).await;
+                    let signature = self.hsm.sign_message(message).await;
                     println!("Signed message: {:?}", signature.0);
                 }
                 Message::Verify(message, signature) => {
-                    let verified = self.hsm.verify(message, signature).await;
+                    let verified = self.hsm.verify_message(message, signature).await;
                     println!("Verified message: {:?}", verified);
                 }
             }
