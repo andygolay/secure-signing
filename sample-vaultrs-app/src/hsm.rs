@@ -10,7 +10,7 @@ pub trait Hsm {
 }
 
 pub struct VaultHsm {
-    client: VaultClient, // Wrap the client in Arc
+    client: VaultClient, 
     key_name: String,
 }
 
@@ -20,7 +20,7 @@ impl VaultHsm {
         let settings = VaultClientSettingsBuilder::default()
             .address(vault_addr)
             .token(token)
-            .verify(true) // Enable TLS certificate verification
+            .verify(true) 
             .build()
             .expect("Failed to build VaultClientSettings");
 
@@ -65,6 +65,6 @@ impl Hsm for VaultHsm {
         .await
         .expect("Failed to verify message");
     
-        response.valid // Return the `valid` field from the response
+        response.valid 
     }
 }
