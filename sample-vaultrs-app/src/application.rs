@@ -20,7 +20,7 @@ impl Application {
                     println!("Signed message: {:?}", signature.0);
                 }
                 Message::Verify(message, signature) => {
-                    let verified = self.hsm.verify(message, Signature(signature)).await;
+                    let verified = self.hsm.verify(message, signature).await;
                     println!("Verified message: {:?}", verified);
                 }
             }

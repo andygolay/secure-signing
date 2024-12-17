@@ -1,26 +1,30 @@
+use dotenv::dotenv;
+use std::env;
+
 use sample_vaultrs_app::application::Application;
-use sample_vaultrs_app::hsm::VaultHsm;
+use sample_vaultrs_app::hsm::{Hsm, VaultHsm};
 use sample_vaultrs_app::stream::MockStream;
-use sample_vaultrs_app::message::{Message, Bytes};
+use sample_vaultrs_app::message::{Message, Bytes, Signature};
 
 #[tokio::main]
 async fn main() {
-    let vault_addr = "https://<your-hcp-vault-url>";
-    let token = "<your-hcp-vault-token>";
-    let key_name = "my-key";
+    dotenv().ok();
 
-    // Initialize HSM
-    let hsm = VaultHsm::new(vault_addr, token, key_name);
+    let vault_addr = env::var("VAULT_ADDR").expect("VAULT_ADDR not set");
+    let token = env::var("VAULT_TOKEN").expect("VAULT_TOKEN not set");
+    let key_name = env::var("KEY_NAME").expect("KEY_NAME not set");
 
-    // Simulate a stream of messages
+    let hsm = VaultHsm::new(&vault_addr, &token, &key_name);
+
+    let message_bytes = Bytes(b"Hello, Vault!".to_vec());
+    let signature = hsm.sign(message_bytes.clone()).await;
+
     let actions = vec![
-        Message::Sign(Bytes(b"Hello, Vault!".to_vec())),
-        Message::Verify(Bytes(b"Hello, Vault!".to_vec()), Bytes(vec![/* Signature bytes */])),
+        Message::Sign(message_bytes.clone()),
+        Message::Verify(message_bytes, Signature(signature.0))
     ];
-    let stream = MockStream::new(actions);
 
-    // Run the application
+    let stream = MockStream::new(actions);
     let mut app = Application::new(Box::new(hsm), Box::new(stream));
     app.run().await;
 }
-

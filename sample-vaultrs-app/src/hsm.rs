@@ -53,7 +53,7 @@ impl Hsm for VaultHsm {
 
     async fn verify(&self, message: Bytes, signature: Signature) -> bool {
         let input = hex::encode(message.0);
-        let sig_hex = hex::encode(signature.0 .0);
+        let sig_hex = hex::encode(signature.0);
     
         let response = verify(
             &self.client,
